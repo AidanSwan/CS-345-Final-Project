@@ -5,17 +5,17 @@ from sklearn.metrics import accuracy_score, confusion_matrix, classification_rep
 
 
 def load_data(fname):
-    """
-    Takes the path to a CSV file and loads it into a pandas DataFrame.
-    """
+
+    # Takes the path to a CSV file and loads it into a pandas DataFrame.
+
     df = pd.read_csv(fname)
     return df
 
 
 def clean_data(df):
-    """
-    Removes non numerical columns and replaces NaN and infinite values with column medians.
-    """
+    
+    # Removes non numerical columns and replaces NaN and infinite values with column medians.
+    
     # Keep only numeric columns
     df = df.select_dtypes(include=[np.number])
 
@@ -29,11 +29,11 @@ def clean_data(df):
 
 
 def split_data(df, ratio):
-    """
-    Randomly splits the DataFrame into training and testing sets
-    according to the given ratio.
-    ratio is the fraction of data used for training.
-    """
+    
+    # Randomly splits the DataFrame into training and testing sets
+    # according to the given ratio.
+    # ratio is the fraction of data used for training.
+    
     if not (0.0 < ratio < 1.0):
         raise ValueError("ratio must be between 0 and 1")
 
@@ -47,11 +47,11 @@ def split_data(df, ratio):
 
 
 def model_evaluation(model, X_test, y_test):
-    """
-    Evaluates a trained classification model on the testing set.
-    Prints test accuracy, confusion matrix, and classification report.
-    Returns the classification report string.
-    """
+    
+    # Evaluates a trained classification model on the testing set.
+    # Prints test accuracy, confusion matrix, and classification report.
+    # Returns the classification report string.
+    
     y_pred = model.predict(X_test)
 
     acc = accuracy_score(y_test, y_pred)
