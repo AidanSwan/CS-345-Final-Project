@@ -1,0 +1,186 @@
+Loading and preparing dataset
+Splitting into train and test
+
+Direct multi class classification on all classes
+Test Accuracy: 0.9979985440005216
+Confusion Matrix:
+[[348457     75      7      7     47     13      3      1      0      2
+     187      1      5      5      1]
+ [    57    340      0      0      0      0      0      0      0      0
+       0      0      0      0      0]
+ [     3      0  25464      0      0      0      0      0      0      0
+       0      0      0      0      0]
+ [     1      0      0   2039      4      2      0      0      0      0
+       0      0      0      0      0]
+ [    29      0      0      4  46209      0      0      0      0      0
+      11      0      1      0      0]
+ [    10      0      1      0      0   1075      6      0      0      0
+       0      0      0      0      0]
+ [     3      0      1      0      0      4   1107      0      0      0
+       0      0      0      0      0]
+ [     4      0      0      0      0      0      0   1549      0      0
+       0      0      0      0      0]
+ [     1      0      0      0      0      0      0      0      2      0
+       0      0      0      0      0]
+ [     1      0      0      0      0      0      0      0      0      9
+       0      0      0      0      0]
+ [   237      0      0      0      6      0      0      0      0      0
+   31533      0      0      0      1]
+ [     2      0      1      0      0      0      1      0      0      0
+       0   1183      0      0      0]
+ [     6      0      0      0      0      0      1      1      0      0
+       1      0    232      1     84]
+ [     0      0      0      0      2      0      0      0      0      0
+       0      0      0      1      0]
+ [     5      0      0      0      0      0      2      1      0      0
+       1      0     71      0     44]]
+Classification Report:
+                            precision    recall  f1-score   support
+
+                    BENIGN       1.00      1.00      1.00    348811
+                       Bot       0.82      0.86      0.84       397
+                      DDoS       1.00      1.00      1.00     25467
+             DoS GoldenEye       0.99      1.00      1.00      2046
+                  DoS Hulk       1.00      1.00      1.00     46254
+          DoS Slowhttptest       0.98      0.98      0.98      1092
+             DoS slowloris       0.99      0.99      0.99      1115
+               FTP-Patator       1.00      1.00      1.00      1553
+                Heartbleed       1.00      0.67      0.80         3
+              Infiltration       0.82      0.90      0.86        10
+                  PortScan       0.99      0.99      0.99     31777
+               SSH-Patator       1.00      1.00      1.00      1187
+  Web Attack � Brute Force       0.75      0.71      0.73       326
+Web Attack � Sql Injection       0.14      0.33      0.20         3
+          Web Attack � XSS       0.34      0.35      0.35       124
+
+                  accuracy                           1.00    460165
+                 macro avg       0.85      0.85      0.85    460165
+              weighted avg       1.00      1.00      1.00    460165
+
+
+First layer binary classification benign vs malicious
+Test Accuracy: 0.9986504840654983
+Confusion Matrix:
+[[348336    475]
+ [   146 111208]]
+Classification Report:
+              precision    recall  f1-score   support
+
+      BENIGN       1.00      1.00      1.00    348811
+   MALICIOUS       1.00      1.00      1.00    111354
+
+    accuracy                           1.00    460165
+   macro avg       1.00      1.00      1.00    460165
+weighted avg       1.00      1.00      1.00    460165
+
+
+Second layer multi class classification on malicious samples
+Test Accuracy: 0.999353413438224
+Confusion Matrix:
+[[  397     0     0     0     0     0     0     0     0     0     0     0]
+ [    0 25466     1     0     0     0     0     0     0     0     0     0]
+ [    0     0  2039     5     2     0     0     0     0     0     0     0]
+ [    0     1     8 46235     0     1     0     0     0     8     0     1]
+ [    0     0     1     1  1081     7     0     0     0     1     0     1]
+ [    0     0     0     2     8  1104     0     0     0     1     0     0]
+ [    0     0     0     0     0     0  1553     0     0     0     0     0]
+ [    0     0     0     0     0     0     0     2     0     0     0     1]
+ [    0     0     0     0     0     1     0     0     9     0     0     0]
+ [    0     0     0     6     2     1     0     0     0 31767     0     1]
+ [    0     0     0     0     0     0     0     0     0     0  1187     0]
+ [    0     0     3     0     1     1     1     0     0     5     0   442]]
+Classification Report:
+                  precision    recall  f1-score   support
+
+             Bot       1.00      1.00      1.00       397
+            DDoS       1.00      1.00      1.00     25467
+   DoS GoldenEye       0.99      1.00      1.00      2046
+        DoS Hulk       1.00      1.00      1.00     46254
+DoS Slowhttptest       0.99      0.99      0.99      1092
+   DoS slowloris       0.99      0.99      0.99      1115
+     FTP-Patator       1.00      1.00      1.00      1553
+      Heartbleed       1.00      0.67      0.80         3
+    Infiltration       1.00      0.90      0.95        10
+        PortScan       1.00      1.00      1.00     31777
+     SSH-Patator       1.00      1.00      1.00      1187
+      Web Attack       0.99      0.98      0.98       453
+
+        accuracy                           1.00    111354
+       macro avg       1.00      0.96      0.98    111354
+    weighted avg       1.00      1.00      1.00    111354
+
+
+Third layer web attack subtype classification
+Test Accuracy: 0.6467991169977925
+Confusion Matrix:
+[[242   1  83]
+ [  0   3   0]
+ [ 76   0  48]]
+Classification Report:
+                            precision    recall  f1-score   support
+
+  Web Attack � Brute Force       0.76      0.74      0.75       326
+Web Attack � Sql Injection       0.75      1.00      0.86         3
+          Web Attack � XSS       0.37      0.39      0.38       124
+
+                  accuracy                           0.65       453
+                 macro avg       0.63      0.71      0.66       453
+              weighted avg       0.65      0.65      0.65       453
+
+
+Final hierarchical system evaluation
+Final hierarchical accuracy 0.9981745678180652
+Final hierarchical confusion matrix
+[[348336    128     15      6     77     20      4      2      1      4
+     196      2     15      1      4]
+ [    39    358      0      0      0      0      0      0      0      0
+       0      0      0      0      0]
+ [     4      0  25462      1      0      0      0      0      0      0
+       0      0      0      0      0]
+ [     2      0      0   2038      4      2      0      0      0      0
+       0      0      0      0      0]
+ [    13      0      1      8  46222      0      1      0      0      0
+       8      0      1      0      0]
+ [     5      0      0      1      0   1079      6      0      0      0
+       0      0      1      0      0]
+ [     4      0      0      0      1      8   1101      0      0      0
+       1      0      0      0      0]
+ [     2      0      0      0      0      0      0   1551      0      0
+       0      0      0      0      0]
+ [     0      0      0      0      0      0      0      0      2      0
+       0      0      0      0      1]
+ [     4      0      0      0      0      0      0      0      0      6
+       0      0      0      0      0]
+ [    65      0      0      0      6      2      0      0      0      0
+   31703      0      0      0      1]
+ [     0      0      0      0      0      0      0      0      0      0
+       0   1187      0      0      0]
+ [     2      0      0      0      0      0      0      0      0      0
+       4      0    238      1     81]
+ [     0      0      0      2      0      0      0      0      0      0
+       0      0      0      1      0]
+ [     6      0      0      0      0      1      0      1      0      0
+       0      0     75      0     41]]
+Final hierarchical classification report
+                            precision    recall  f1-score   support
+
+                    BENIGN       1.00      1.00      1.00    348811
+                       Bot       0.74      0.90      0.81       397
+                      DDoS       1.00      1.00      1.00     25467
+             DoS GoldenEye       0.99      1.00      0.99      2046
+                  DoS Hulk       1.00      1.00      1.00     46254
+          DoS Slowhttptest       0.97      0.99      0.98      1092
+             DoS slowloris       0.99      0.99      0.99      1115
+               FTP-Patator       1.00      1.00      1.00      1553
+                Heartbleed       0.67      0.67      0.67         3
+              Infiltration       0.60      0.60      0.60        10
+                  PortScan       0.99      1.00      1.00     31777
+               SSH-Patator       1.00      1.00      1.00      1187
+  Web Attack � Brute Force       0.72      0.73      0.73       326
+Web Attack � Sql Injection       0.33      0.33      0.33         3
+          Web Attack � XSS       0.32      0.33      0.33       124
+
+                  accuracy                           1.00    460165
+                 macro avg       0.82      0.84      0.83    460165
+              weighted avg       1.00      1.00      1.00    460165
+
