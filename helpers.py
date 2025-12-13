@@ -51,8 +51,12 @@ def model_evaluation(model, X_test, y_test):
     # Evaluates a trained classification model on the testing set.
     # Prints test accuracy, confusion matrix, and classification report.
     # Returns the classification report string.
-    
+
     y_pred = model.predict(X_test)
+
+    # Force consistent types (prevents confusion_matrix/np.unique sort errors)
+    y_test = pd.Series(y_test).astype(str)
+    y_pred = pd.Series(y_pred).astype(str)
 
     acc = accuracy_score(y_test, y_pred)
     print("Test Accuracy:", acc)

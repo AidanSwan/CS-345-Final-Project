@@ -99,24 +99,13 @@ def get_malicious_dataset_with_merged_webattacks(df):
         raise ValueError(f"Label column '{LABEL_COL}' not found")
 
     df_mal = df.copy()
+    df_mal[LABEL_COL] = df_mal[LABEL_COL].astype(str).str.strip()
 
-    # Remove benign
-    df_mal = df_mal[df_mal[LABEL_COL] != "BENIGN"]
+    df_mal = df_mal[df_mal[LABEL_COL].str.upper() != "BENIGN"]
 
-    # Known web attack labels in CIC IDS style datasets
-    web_labels = {
-        "Web Attack Brute Force",
-        "Web Attack XSS",
-        "Web Attack SQL Injection",
-        "Web Attack"        # in case it already appears merged
-    }
-
-    def merge_label(lbl):
-        if lbl in web_labels:
-            return "Web Attack"
-        return lbl
-
-    df_mal[LABEL_COL] = df_mal[LABEL_COL].apply(merge_label)
+    df_mal[LABEL_COL] = df_mal[LABEL_COL].apply(
+        lambda x: "Web Attack" if "web attack" in x.lower() else x
+    )
 
     return df_mal
 
@@ -124,24 +113,16 @@ def get_malicious_dataset_with_merged_webattacks(df):
 # 2.2.3 Third layer web attack subtypes
 def get_webattack_dataset(df):
     """
-    Takes a DataFrame df and returns a new DataFrame that contains
-    only web attack samples
-
-    The label column keeps the original three subtype labels
-    "Web Attack Brute Force"
-    "Web Attack XSS"
-    "Web Attack SQL Injection"
+    Return only web attack samples. Matches by substring so it works even if
+    labels have extra spaces or slightly different formatting.
     """
-    if LABEL_COL not in df.columns:
-        raise ValueError(f"Label column '{LABEL_COL}' not found")
+    df_web = df.copy()
 
-    web_subtypes = [
-        "Web Attack Brute Force",
-        "Web Attack XSS",
-        "Web Attack SQL Injection"
-    ]
+    df_web[LABEL_COL] = df_web[LABEL_COL].astype(str).str.strip()
 
-    df_web = df[df[LABEL_COL].isin(web_subtypes)].copy()
+    mask = df_web[LABEL_COL].str.contains("web attack", case=False, na=False)
+    df_web = df_web[mask].copy()
+
     return df_web
 
 

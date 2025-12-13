@@ -21,15 +21,14 @@ LABEL_COL = "Label"
 
 
 def load_and_prepare_full_dataset():
-    # Replace these with the actual csv file names in CS345FinalProject.zip
     csv_files = [
-        "file1.csv",
-        "file2.csv",
-        "file3.csv",
-        "file4.csv",
-        "file5.csv",
-        "file6.csv",
-        "file7.csv",
+        "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+        "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+        "Friday-WorkingHours-Morning.pcap_ISCX.csv",
+        "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+        "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+        "Tuesday-WorkingHours.pcap_ISCX.csv",
+        "Wednesday-workingHours.pcap_ISCX.csv",
     ]
 
     dfs = []
@@ -37,11 +36,31 @@ def load_and_prepare_full_dataset():
     for fname in csv_files:
         df_raw = load_data(fname)
 
-        if LABEL_COL not in df_raw.columns:
-            raise ValueError(f"Label column {LABEL_COL} not found in {fname}")
+        # normalize column names (fixes 'Label ' etc.)
+        df_raw.columns = df_raw.columns.astype(str).str.strip()
 
-        labels = df_raw[LABEL_COL]
-        features = df_raw.drop(columns=[LABEL_COL])
+        # find label column case-insensitively
+        col_map = {c.lower(): c for c in df_raw.columns}
+        if "label" not in col_map:
+            raise ValueError(
+                f"No label column found in {fname}. "
+                f"First columns: {list(df_raw.columns)[:20]}"
+            )
+
+        real_label_col = col_map["label"]
+
+        labels = df_raw[real_label_col]
+
+        # make labels safe: strip spaces, force string, drop missing
+        labels = labels.astype(str).str.strip()
+        labels = labels.replace({"nan": np.nan, "None": np.nan, "": np.nan})
+
+        features = df_raw.drop(columns=[real_label_col])
+
+        # keep only rows with a real label
+        mask = labels.notna()
+        labels = labels[mask]
+        features = features.loc[mask]
 
         features_clean = clean_data(features)
 
@@ -67,7 +86,8 @@ def main():
     y_test_full = df_test[LABEL_COL]
 
     print("\nDirect multi class classification on all classes")
-    model_direct = direct_multiclass_train("mlp", X_train_full, y_train_full)
+    # fast and reliable on large data
+    model_direct = direct_multiclass_train("dt", X_train_full, y_train_full)
     model_evaluation(model_direct, X_test_full, y_test_full)
 
     print("\nFirst layer binary classification benign vs malicious")
